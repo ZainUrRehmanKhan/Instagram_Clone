@@ -5,9 +5,11 @@ class PageHeaderProfile implements SliverPersistentHeaderDelegate{
   PageHeaderProfile({
     this.minExtent,
     this.maxExtent,
-    this.controller
+    this.controller,
+    this.tickerProvider
   });
 
+  final TickerProvider tickerProvider;
   final TabController controller;
   final double minExtent;
   final double maxExtent;
@@ -43,4 +45,13 @@ class PageHeaderProfile implements SliverPersistentHeaderDelegate{
   OverScrollHeaderStretchConfiguration get stretchConfiguration {
     return OverScrollHeaderStretchConfiguration();
   }
+
+  @override
+  PersistentHeaderShowOnScreenConfiguration get showOnScreenConfiguration => PersistentHeaderShowOnScreenConfiguration(
+    minShowOnScreenExtent: minExtent,
+    maxShowOnScreenExtent: maxExtent
+  );
+
+  @override
+  TickerProvider get vsync => tickerProvider;
 }

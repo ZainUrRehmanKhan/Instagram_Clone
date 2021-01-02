@@ -10,7 +10,7 @@ class TimelinePage extends StatefulWidget {
   _TimelinePageState createState() => _TimelinePageState();
 }
 
-class _TimelinePageState extends State<TimelinePage> {
+class _TimelinePageState extends State<TimelinePage> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return
@@ -32,9 +32,9 @@ class _TimelinePageState extends State<TimelinePage> {
             SliverList(
                 delegate: SliverChildBuilderDelegate(
                         (context, index){
-                      return PostTimeline(index: index);
+                      return PostTimeline(index: index, tickerProvider: this);
                     },
-                    childCount: dataModel.length
+                  childCount: dataModel.length
                 )
             )
           ]

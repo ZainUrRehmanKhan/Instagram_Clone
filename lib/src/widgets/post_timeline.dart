@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/src/models/post_model.dart';
 import 'bottom-sheet-handle.dart';
 
-class PostTimeline extends StatefulWidget {
+class PostTimeline extends StatefulWidget{
   final int index;
-  PostTimeline({this.index});
+  final TickerProvider tickerProvider;
+  PostTimeline({this.index, this.tickerProvider});
 
   @override
   _PostTimelineState createState() => _PostTimelineState();
 }
 
 class _PostTimelineState extends State<PostTimeline> {
+
+  AnimationController _animationController;
+  Animation<double> _sizeController;
 
   TransformationController _transformationController =
   TransformationController();
@@ -23,7 +27,6 @@ class _PostTimelineState extends State<PostTimeline> {
 
     setState(() {});
   }
-
   _setFavourite(index){
     setState(() {
       if(dataModel[index].favourite)
@@ -34,7 +37,24 @@ class _PostTimelineState extends State<PostTimeline> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 300),
+      vsync: widget.tickerProvider
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _sizeController = Tween<double>(
+      end: 1.3,
+      begin: 1,
+    ).animate(CurvedAnimation(
+        curve: Curves.easeIn,
+        parent: _animationController
+    ));
     return Column(
       children: <Widget>[
         Row(
@@ -92,16 +112,32 @@ class _PostTimelineState extends State<PostTimeline> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 10),
-                    child: GestureDetector(
-                        onTap: () {
-                          _setFavourite(widget.index);
-                        },
-                        child: dataModel[widget.index].favourite ?
-                          Image.asset('assets/icons/favourite-red.png', width: 24) :
-                          Image.asset('assets/icons/favourite-empty.png', width: 24, color: Colors.black)
-                        )
+                  AnimatedBuilder(
+                    builder: (context, _) {
+                     return Padding(
+                         padding: const EdgeInsets.only(left: 16, right: 10),
+                         child: GestureDetector(
+                             onTap: () async {
+                               _setFavourite(widget.index);
+                               try {
+                                 await _animationController.forward().orCancel;
+                               } catch(e) {
+                               } finally {
+                                 _animationController.reset();
+                               }
+                               // if(dataModel[widget.index].favourite) {
+                               //
+                               // }
+                             },
+                             child: Transform.scale(
+                               scale: _sizeController.value,
+                               child: dataModel[widget.index].favourite ?
+                                 Image.asset('assets/icons/favourite-red.png', width: 24) :
+                                 Image.asset('assets/icons/favourite-empty.png', width: 24, color: Colors.black),
+                             )
+                         )
+                     );
+                    }, animation: _animationController,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),

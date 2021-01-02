@@ -57,10 +57,11 @@ class _StatusTimelineState extends State<StatusTimeline> {
               width: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(colors: [Color(0xffF58529), Color(0xffFEDA77), Color(0xffDD2A7B), Color(0xff8134AF)],
+                gradient: LinearGradient(
                 begin: Alignment.bottomLeft,
-                  end: Alignment.topRight
-                )
+                  end: Alignment.topRight,
+                  colors: [Color(0xffF58529), Color(0xffFEDA77), Color(0xffDD2A7B), Color(0xff8134AF)]
+                ),
               ),
               child: Padding(
                   padding: const EdgeInsets.all(2.0),

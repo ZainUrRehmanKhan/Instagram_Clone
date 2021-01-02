@@ -10,7 +10,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin {
 
   TabController _tabController;
   ScrollController _scrollViewController;
@@ -149,7 +149,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
               delegate: PageHeaderProfile(
                   controller: _tabController,
                   maxExtent: 50,
-                  minExtent: 50
+                  minExtent: 50,
+                tickerProvider: this
               ),
             )
           ];
